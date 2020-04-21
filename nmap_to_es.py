@@ -47,4 +47,4 @@ if __name__ == '__main__':
     #
     #
     # # print json_
-    json_to_es('nmap-es', json.dumps(json_))
+    json_to_es('nmap-es', json_)
