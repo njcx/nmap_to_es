@@ -8,6 +8,7 @@ from utils import Logger
 import xmltodict
 import os
 import threading
+import time
 logger = Logger.get_logger(__name__, path=os.getcwd())
 es = Elasticsearch([{'host': es_ip, 'port': es_port}])
 
@@ -26,7 +27,6 @@ def xml_to_json(path):
 
 
 def json_to_es(index, json_):
-
     try:
         es.index(index=index, doc_type="vuln", body=json_)
     except Exception as e:
@@ -34,7 +34,6 @@ def json_to_es(index, json_):
 
 
 def masscan_scan(ip):
-
     try:
         if ip:
             if not os.path.exists('tmp'):
@@ -87,7 +86,7 @@ def read_txt(path):
 
 def nmap_scan_worker():
     lst = read_txt('alive_host/host.txt')
-    tmp_ = [lst[i:i+2] for i in range(0, len(lst), 2)]
+    tmp_ = [lst[i:i+5] for i in range(0, len(lst), 5)]
     print tmp_
     if tmp_:
         for list_ in tmp_:
@@ -101,32 +100,22 @@ def nmap_scan_worker():
 
 
 def nmap_to_es(index):
-
         if os.path.exists('report'):
             files = os.listdir('report')
         for file in files:
             try:
                 json_to_es(index, xml_to_json('report' + '/' +file))
-
             except Exception as e:
                 logger.error(str(e))
                 pass
-
-
-
-
-
-
-
-
-
-
+        os.system("""rm -f report/*.xml""")
 
 
 if __name__ == '__main__':
-    json_ = xml_to_json('test/test.xml')
+    now = time.strftime('%Y-%m-%d')
     masscan_scan_worker()
     nmap_scan_worker()
+    nmap_to_es('nmap-' + now)
 
 
     # json_to_es('nmap-es', json_)
