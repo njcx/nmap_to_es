@@ -16,7 +16,7 @@ class Logger(object):
     def get_logger(name="Logger", path=None):
 
         now = time.strftime('%Y-%m-%d')
-        log_file = path + '/logs/' + 'nmap_to_es' + now + '.log'
+        log_file = path + '/logs/' + 'nmap_to_es_' + now + '.log'
 
         logger = logging.Logger(name)
         std_out = logging.StreamHandler()
