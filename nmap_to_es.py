@@ -87,7 +87,8 @@ def read_txt(path):
 
 def nmap_scan_worker():
     lst = read_txt('alive_host/host.txt')
-    tmp_ = [lst[i:i+5] for i in range(0, len(lst), 5)]
+    tmp_ = [lst[i:i+2] for i in range(0, len(lst), 2)]
+    print tmp_
     if tmp_:
         for list_ in tmp_:
             t_obj = []
@@ -97,6 +98,29 @@ def nmap_scan_worker():
                 t.start()
             for t in t_obj:
                 t.join()
+
+
+def nmap_to_es(index):
+
+        if os.path.exists('report'):
+            files = os.listdir('report')
+        for file in files:
+            try:
+                json_to_es(index, xml_to_json('report' + '/' +file))
+
+            except Exception as e:
+                logger.error(str(e))
+                pass
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
