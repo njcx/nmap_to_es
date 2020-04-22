@@ -37,7 +37,9 @@ def masscan_scan(ip):
 
     try:
         if ip:
-            os.system('masscan --ping {0} --rate 1000   -oL {1}.txt'.format(ip, ip.split('/')[0]))
+            if not os.path.exists('tmp'):
+                os.makedirs('tmp')
+            os.system('masscan --ping {0} --rate 1000 -oL tmp/{1}.txt'.format(ip, ip.split('/')[0]))
     except Exception as e:
         logger.error(str(e))
 
@@ -45,12 +47,15 @@ def masscan_scan(ip):
 def nmap_scan(ip):
     try:
         if ip:
-            os.system('nmap -T5 -Pn -A -oX {0}.xml {1}'.format(ip, ip))
+            if not os.path.exists('report'):
+                os.makedirs('report')
+            os.system('nmap -T5 -Pn -A -oX report/{0}.xml {1}'.format(ip, ip))
     except Exception as e:
         logger.error(str(e))
 
 
 def masscan_scan_worker():
+
     t_obj = []
     for i in range(len(ip_list)):
         t = threading.Thread(target=masscan_scan, args=(ip_list[i],))
@@ -60,28 +65,44 @@ def masscan_scan_worker():
         t.join()
     if not os.path.exists('alive_host'):
         os.makedirs('alive_host')
-        print("目录创建成功！")
-    cmd = """awk '{print $4}' *.txt | tr -s '\n' > alive_host/host.txt """
+    cmd = """ awk '{print $4}' tmp/*.txt | tr -s '\n' > alive_host/host.txt """
     os.system(cmd)
-    os.system("""rm -f *.txt""")
+    os.system("""rm -f tmp/*.txt""")
+
+
+def read_txt(path):
+    lines = []
+    try:
+        with open(path, 'r') as file_to_read:
+            while True:
+                line = file_to_read.readline()
+                if not line:
+                    break
+                line = line.strip('\n')
+                lines.append(line)
+    except Exception as e:
+        logger.error(str(e))
+    return lines
 
 
 def nmap_scan_worker():
-
-    t_obj = []
-    for i in range(len(ip_list)):
-        t = threading.Thread(target=masscan_scan, args=(ip_list[i],))
-        t_obj.append(t)
-        t.start()
-    for t in t_obj:
-        t.join()
+    lst = read_txt('alive_host/host.txt')
+    tmp_ = [lst[i:i+5] for i in range(0, len(lst), 5)]
+    if tmp_:
+        for list_ in tmp_:
+            t_obj = []
+            for i in range(len(list_)):
+                t = threading.Thread(target=nmap_scan, args=(list_[i],))
+                t_obj.append(t)
+                t.start()
+            for t in t_obj:
+                t.join()
 
 
 if __name__ == '__main__':
     json_ = xml_to_json('test/test.xml')
-
-    print json_
     masscan_scan_worker()
+    nmap_scan_worker()
 
 
     # json_to_es('nmap-es', json_)
