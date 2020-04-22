@@ -3,12 +3,12 @@
 # @Email   : njcx86@gmail.com
 
 from elasticsearch import Elasticsearch
-import xmltodict
+from settings import es_ip, es_port
+from utils import Logger
 import json
-
-
-es_ip = "10.10.116.177"
-es_port = 9201
+import xmltodict
+import os
+logger = Logger.get_logger(__name__, path=os.getcwd())
 es = Elasticsearch([{'host': es_ip, 'port': es_port}])
 
 
@@ -21,7 +21,7 @@ def xml_to_json(path):
                     if key not in ["verbose", 'scaninfo', 'taskbegin', 'taskend', "debugging"]}
 
     except Exception as e:
-        print(e)
+        logger.error(str(e))
         return {}
 
 
@@ -31,8 +31,7 @@ def json_to_es(index, json_):
         es.index(index=index, doc_type="vuln", body=json_)
 
     except Exception as e:
-        print(e)
-        return {}
+        logger.error(str(e))
 
 
 if __name__ == '__main__':
@@ -46,5 +45,5 @@ if __name__ == '__main__':
     # del json_['nmaprun']['taskend']
     #
     #
-    # # print json_
-    json_to_es('nmap-es', json_)
+    # # # print json_
+    # json_to_es('nmap-es', json_)
