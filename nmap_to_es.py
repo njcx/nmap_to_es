@@ -48,7 +48,7 @@ def nmap_scan(ip):
         if ip:
             if not os.path.exists('report'):
                 os.makedirs('report')
-            os.system('nmap -T5 -Pn -A -oX report/{0}.xml {1}'.format(ip, ip))
+            os.system('nmap -sV -Pn -A -T5 --script=nmap-vulners/vulners.nse -oX report/{0}.xml {1}'.format(ip, ip))
     except Exception as e:
         logger.error(str(e))
 
