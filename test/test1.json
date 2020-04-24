@@ -1,0 +1,342 @@
+[{
+	"@protocol": "tcp",
+	"@portid": "22",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "ssh",
+		"@product": "OpenSSH",
+		"@version": "7.4",
+		"@extrainfo": "protocol 2.0",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:openbsd:openssh:7.4"
+	},
+	"script": {
+		"@id": "ssh-hostkey",
+		"@output": "\n  2048 3a:a9:03:ef:0c:f6:a0:8d:52:3e:59:f4:2e:2c:3e:9a (RSA)\n  256 39:39:e1:71:99:e1:68:98:a3:b6:bf:57:41:37:0d:d7 (ECDSA)\n  256 3a:68:a7:04:db:67:30:ea:3f:dc:bd:a4:3e:c8:92:71 (ED25519)",
+		"table": [{
+			"elem": [{
+				"@key": "type",
+				"#text": "ssh-rsa"
+			}, {
+				"@key": "key",
+				"#text": "AAAAB3NzaC1yc2EAAAADAQABAAABAQDikAQ4O5Vajap5ZRz8swdGP4IDM9Btzlyw8vWQ5oFn/2fgq5Uk0DEvtjUcfkHVN0HxMcvw5PtgF1s1oD/VwZaq/HUcF0cm+x9VvbfzyRY0jmIfKYklQJRXirRjwNw1lj5ctCbe6K5biZhjPe8bTkfq3pcz2kHnGLk/uHylEfzmxFCbUQmVs6x+IHZWlQH9bSBVBKAvYiIKbcDlTPEB5PXMS+Wwgkl1XlT806s+RcXT+GyVxqrn02gWVAMvj0KQfs43B1FHRnqRBkILQp4E0w1wbSMAwwWvCmH5BGVSiLYzOFG7qp+R7CpOA4T+Y2BZCoWwhs8tRH22Tk2ePaRds47V"
+			}, {
+				"@key": "fingerprint",
+				"#text": "3aa903ef0cf6a08d523e59f42e2c3e9a"
+			}, {
+				"@key": "bits",
+				"#text": "2048"
+			}]
+		}, {
+			"elem": [{
+				"@key": "type",
+				"#text": "ecdsa-sha2-nistp256"
+			}, {
+				"@key": "key",
+				"#text": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLy2iqfVS+hImZMbBbSExydyK3mVaddxd7qSIIwK9cq4WHf6xvMQtlgcy8Og/IXddqPDJqzVod16OXA72YxqL08="
+			}, {
+				"@key": "fingerprint",
+				"#text": "3939e17199e16898a3b6bf5741370dd7"
+			}, {
+				"@key": "bits",
+				"#text": "256"
+			}]
+		}, {
+			"elem": [{
+				"@key": "type",
+				"#text": "ssh-ed25519"
+			}, {
+				"@key": "key",
+				"#text": "AAAAC3NzaC1lZDI1NTE5AAAAIC5cYJQv1dSOXUeyP9wIpN/EPmOzzEf12PhLD/dnRfYe"
+			}, {
+				"@key": "fingerprint",
+				"#text": "3a68a704db6730ea3fdcbda43ec89271"
+			}, {
+				"@key": "bits",
+				"#text": "256"
+			}]
+		}]
+	}
+}, {
+	"@protocol": "tcp",
+	"@portid": "80",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}]
+}, {
+	"@protocol": "tcp",
+	"@portid": "111",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "rpcbind",
+		"@version": "2-4",
+		"@extrainfo": "RPC #100000",
+		"@method": "probed",
+		"@conf": "10"
+	},
+	"script": {
+		"@id": "rpcinfo",
+		"@output": "\n  program version    port/proto  service\n  100000  2,3,4        111/tcp   rpcbind\n  100000  2,3,4        111/udp   rpcbind\n  100000  3,4          111/tcp6  rpcbind\n  100000  3,4          111/udp6  rpcbind\n",
+		"table": {
+			"@key": "100000",
+			"table": [{
+				"@key": "tcp6",
+				"elem": [{
+					"@key": "owner",
+					"#text": "superuser"
+				}, {
+					"@key": "addr",
+					"#text": "::"
+				}, {
+					"@key": "port",
+					"#text": "111"
+				}],
+				"table": {
+					"@key": "version",
+					"elem": ["3", "4"]
+				}
+			}, {
+				"@key": "local",
+				"elem": [{
+					"@key": "owner",
+					"#text": "superuser"
+				}, {
+					"@key": "addr",
+					"#text": "/var/run/rpcbind.sock"
+				}],
+				"table": {
+					"@key": "version",
+					"elem": ["3", "4"]
+				}
+			}, {
+				"@key": "udp",
+				"elem": [{
+					"@key": "owner",
+					"#text": "superuser"
+				}, {
+					"@key": "addr",
+					"#text": "0.0.0.0"
+				}, {
+					"@key": "port",
+					"#text": "111"
+				}],
+				"table": {
+					"@key": "version",
+					"elem": ["2", "3", "4"]
+				}
+			}, {
+				"@key": "udp6",
+				"elem": [{
+					"@key": "owner",
+					"#text": "superuser"
+				}, {
+					"@key": "addr",
+					"#text": "::"
+				}, {
+					"@key": "port",
+					"#text": "111"
+				}],
+				"table": {
+					"@key": "version",
+					"elem": ["3", "4"]
+				}
+			}, {
+				"@key": "tcp",
+				"elem": [{
+					"@key": "owner",
+					"#text": "superuser"
+				}, {
+					"@key": "addr",
+					"#text": "0.0.0.0"
+				}, {
+					"@key": "port",
+					"#text": "111"
+				}],
+				"table": {
+					"@key": "version",
+					"elem": ["2", "3", "4"]
+				}
+			}]
+		}
+	}
+}, {
+	"@protocol": "tcp",
+	"@portid": "443",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}]
+}, {
+	"@protocol": "tcp",
+	"@portid": "445",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}]
+}, {
+	"@protocol": "tcp",
+	"@portid": "3306",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}, {
+		"@id": "mysql-info",
+		"@output": "ERROR: Script execution failed (use -d to debug)"
+	}]
+}, {
+	"@protocol": "tcp",
+	"@portid": "8000",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-open-proxy",
+		"@output": "Proxy might be redirecting requests"
+	}, {
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}]
+}, {
+	"@protocol": "tcp",
+	"@portid": "8080",
+	"state": {
+		"@state": "open",
+		"@reason": "syn-ack",
+		"@reason_ttl": "56"
+	},
+	"service": {
+		"@name": "http",
+		"@product": "nginx",
+		"@version": "1.16.1",
+		"@method": "probed",
+		"@conf": "10",
+		"cpe": "cpe:/a:igor_sysoev:nginx:1.16.1"
+	},
+	"script": [{
+		"@id": "http-open-proxy",
+		"@output": "Proxy might be redirecting requests"
+	}, {
+		"@id": "http-server-header",
+		"@output": "nginx/1.16.1",
+		"elem": "nginx/1.16.1"
+	}, {
+		"@id": "http-title",
+		"@output": "Welcome to CentOS",
+		"elem": {
+			"@key": "title",
+			"#text": "Welcome to CentOS"
+		}
+	}]
+}]
