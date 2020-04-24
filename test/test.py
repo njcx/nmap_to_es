@@ -25,7 +25,10 @@ def xml_to_json(path):
 def json_to_es(index, json_):
     try:
 
-        print json.dumps(json_.get('host').get('ports').get('port'))
+        #print json.dumps(json_.get('host').get('ports').get('port'))
+
+        for x in json_.get('host').get('ports').get('port'):
+            print json.dumps(x.get('script'))
         es.index(index=index, doc_type="vuln", body=json.dumps(json_))
     except Exception as e:
         print(e)
