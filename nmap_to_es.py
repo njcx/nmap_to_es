@@ -3,9 +3,11 @@
 # @Email   : njcx86@gmail.com
 
 from elasticsearch import Elasticsearch
+from collections import  OrderedDict
 from settings import es_ip, es_port, ip_list
 from utils import Logger
 import xmltodict
+
 import os
 import threading
 import time
@@ -106,8 +108,20 @@ def nmap_to_es(index):
             try:
                 json_to_es(index, xml_to_json('report' + '/' +file))
             except Exception as e:
-                logger.error(str(e))
-                pass
+                # logger.error(str(e))
+                # pass
+                try:
+                    json_ = xml_to_json('report' + '/' + file)
+                    for temp_ in json_.get('host').get('ports').get('port'):
+                        if type(temp_.get('script')) == type([]):
+                            for item_ in temp_.get('script'):
+                                if item_.get('elem'):
+                                    if type(item_.get('elem')) == type(OrderedDict()):
+                                        item_.update(item_.get('elem'))
+                                        item_.pop('elem')
+                except Exception as e:
+                    logger.error(str(e))
+                    pass
         os.system("""rm -f report/*.xml""")
 
 
