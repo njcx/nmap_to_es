@@ -10,6 +10,7 @@ import xmltodict
 import os
 import threading
 import time
+import json
 
 logger = Logger.get_logger(__name__, path=os.getcwd())
 es = Elasticsearch([{'host': es_ip, 'port': es_port}])
@@ -117,17 +118,18 @@ def nmap_to_es(index):
                                     if type(item_.get('elem')) == type(OrderedDict()):
                                         item_.update(item_.get('elem'))
                                         item_.pop('elem')
+                    json_to_es(index, json_)
                 except Exception as e:
                     logger.error(str(e))
+                    logger.debug(str(json.dumps(json_)))
                     pass
-        os.system("""rm -f report/*.xml""")
+        # os.system("""rm -f report/*.xml""")
 
 
 if __name__ == '__main__':
     now = time.strftime('%Y-%m-%d')
-    es.indices.delete('nmap-*')
-    masscan_scan_worker()
-    nmap_scan_worker()
+    # masscan_scan_worker()
+    # nmap_scan_worker()
     es.indices.delete('nmap-*')
     nmap_to_es('nmap-' + now)
 
