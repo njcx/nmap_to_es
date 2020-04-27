@@ -5,7 +5,8 @@
 
 from elasticsearch import Elasticsearch
 from settings import es_ip, es_port
-import xmltodict , json
+import xmltodict, json
+from collections import  OrderedDict
 es = Elasticsearch([{'host': es_ip, 'port': es_port}])
 
 
@@ -28,8 +29,19 @@ def json_to_es(index, json_):
         #print json.dumps(json_.get('host').get('ports').get('port'))
 
         for x in json_.get('host').get('ports').get('port'):
-            print json.dumps(x.get('script'))
-        es.index(index=index, doc_type="vuln", body=json.dumps(json_))
+            if type(x.get('script')) == type([]):
+                for x in x.get('script'):
+                    if x.get('elem'):
+                        if type(x.get('elem')) == type(OrderedDict()):
+                            print x.get('elem')
+                            dict(x, **x.get('elem'))
+                            x.pop('elem')
+
+
+                        # x['elem'] = json.dumps(x.get('elem'))
+                        # print x.get('elem')
+
+        es.index(index=index, doc_type="vuln", body=json_)
     except Exception as e:
         print(e)
 
