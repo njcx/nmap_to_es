@@ -125,8 +125,10 @@ def nmap_to_es(index):
 
 if __name__ == '__main__':
     now = time.strftime('%Y-%m-%d')
+    es.indices.delete('nmap-*')
     masscan_scan_worker()
     nmap_scan_worker()
+    es.indices.delete('nmap-*')
     nmap_to_es('nmap-' + now)
 
 
