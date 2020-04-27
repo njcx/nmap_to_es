@@ -3,14 +3,14 @@
 # @Email   : njcx86@gmail.com
 
 from elasticsearch import Elasticsearch
-from collections import  OrderedDict
+from collections import OrderedDict
 from settings import es_ip, es_port, ip_list
 from utils import Logger
 import xmltodict
-
 import os
 import threading
 import time
+
 logger = Logger.get_logger(__name__, path=os.getcwd())
 es = Elasticsearch([{'host': es_ip, 'port': es_port}])
 
@@ -108,8 +108,6 @@ def nmap_to_es(index):
             try:
                 json_to_es(index, xml_to_json('report' + '/' +file))
             except Exception as e:
-                # logger.error(str(e))
-                # pass
                 try:
                     json_ = xml_to_json('report' + '/' + file)
                     for temp_ in json_.get('host').get('ports').get('port'):
