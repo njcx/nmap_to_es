@@ -25,7 +25,7 @@ def xml_to_json(path):
                     if key not in ["verbose", 'scaninfo', 'taskbegin', 'taskend', "debugging"]}
 
     except Exception as e:
-        logger.error(str(e))
+        logger.error(str(e)+path)
         return {}
 
 
@@ -34,6 +34,7 @@ def json_to_es(index, json_):
         es.index(index=index, doc_type="vuln", body=json_)
     except Exception as e:
         logger.error(str(e))
+        logger.debug(str(json.dumps(json_)))
 
 
 def masscan_scan(ip):
@@ -121,7 +122,6 @@ def nmap_to_es(index):
                     json_to_es(index, json_)
                 except Exception as e:
                     logger.error(str(e))
-                    logger.debug(str(json.dumps(json_)))
                     pass
         # os.system("""rm -f report/*.xml""")
 
