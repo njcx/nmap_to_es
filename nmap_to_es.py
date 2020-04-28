@@ -3,7 +3,6 @@
 # @Email   : njcx86@gmail.com
 
 from elasticsearch import Elasticsearch
-from collections import OrderedDict
 from settings import es_ip, es_port, ip_list
 from utils import Logger
 import xmltodict
@@ -33,8 +32,11 @@ def json_to_es(index, json_):
     try:
         es.index(index=index, doc_type="vuln", body=json_)
     except Exception as e:
-        logger.error(str(e))
-        logger.debug(str(json.dumps(json_)))
+        try:
+            es.index(index=index + '_', doc_type="vuln", body=json.dumps(json_))
+        except Exception as e:
+            logger.error(str(e))
+            pass
 
 
 def masscan_scan(ip):
@@ -107,41 +109,19 @@ def nmap_to_es(index):
         if os.path.exists('report'):
             files = os.listdir('report')
         for file in files:
-            try:
-                json_to_es(index, xml_to_json('report' + '/' +file))
-            except Exception as e:
-                try:
-                    json_ = xml_to_json('report' + '/' + file)
-                    for temp_ in json_.get('host').get('ports').get('port'):
-                        if type(temp_.get('script')) == type([]):
-                            for item_ in temp_.get('script'):
-                                if item_.get('elem'):
-                                    if type(item_.get('elem')) == type(OrderedDict()):
-                                        item_.update(item_.get('elem'))
-                                        item_.pop('elem')
-                    json_to_es(index, json_)
-                except Exception as e:
-                    logger.error(str(e))
-                    pass
-        # os.system("""rm -f report/*.xml""")
+                json_to_es(index, xml_to_json('report'+'/'+file))
+        os.system("""rm -f report/*.xml""")
 
 
 if __name__ == '__main__':
-    now = time.strftime('%Y-%m-%d')
-    # masscan_scan_worker()
-    # nmap_scan_worker()
-    es.indices.delete('nmap-*')
-    nmap_to_es('nmap-' + now)
 
+    while True:
+        now = time.strftime('%Y-%m-%d')
+        masscan_scan_worker()
+        nmap_scan_worker()
+        es.indices.delete('nmap-*')
+        nmap_to_es('nmap-' + now)
 
-    # json_to_es('nmap-es', json_)
-    # del json_['nmaprun']['scaninfo']
-    # del json_['nmaprun']['taskbegin']
-    # del json_['nmaprun']['taskend']
-    #
-    #
-    # # # print json_
-    # json_to_es('nmap-es', json_)
 
 
 
