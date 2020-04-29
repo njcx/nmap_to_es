@@ -35,7 +35,7 @@ def json_to_es(index, json_):
         try:
             es.index(index=index + '_', doc_type="vuln", body=json.dumps(json_))
         except Exception as e:
-            logger.error(str(e))
+            es.index(index=index + '__', doc_type="vuln", body=json.dumps(json_))
             pass
 
 
